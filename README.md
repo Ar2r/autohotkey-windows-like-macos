@@ -1,0 +1,1 @@
+# autohotkey-windows-like-macos
