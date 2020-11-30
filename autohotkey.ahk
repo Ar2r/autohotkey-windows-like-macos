@@ -38,6 +38,7 @@
 #sc01F::SendInput ^{sc01F}  ; Save  cmd+s
 #sc021::SendInput ^{sc021}  ; Find  cmd+f
 #sc018::SendInput ^{sc018}  ; Open  cmd+o
+#sc019::SendInput ^{sc019}  ; Print  cmd+p
 #sc011::SendInput ^{F4}     ; Close  cmd+w
 #sc014::SendInput ^{sc014}  ; New Tab cmd+t
 #sc013::SendInput ^{sc013}  ; Reload cmd+r
@@ -63,10 +64,11 @@
 ; --------------------------------------------------------------
 
 ; Google Chrome
-#IfWinActive, ahk_class Chrome_WidgetWin_1
+#IfWinActive Chrome
 
 ; Show Web Developer Tools with cmd + alt + i
 #!i::Send {F12}
+#sc01E::MsgBox keyA
 
 ; Show source code with cmd + alt + u
 #!u::Send ^u
@@ -81,21 +83,25 @@ $+5::CheckRus(":","%")  ; Двоеточие через Shift+5
 $+6::CheckRus(",","^")  ; Запятая через Shift+6
 $+7::CheckRus(".","&")  ; Точка через Shift+7
 $+8::CheckRus(";","*") ; Точка с запятой через Shift+8
-$+/::CheckRus("?","?")  ; Вопрос через Shift+/
+$+/::CheckRus("?","?")  ; Вопрос через Shift+/%
 
 CheckRus(rus,eng)
 {
-SetFormat, Integer, H
-WinGet, WinID,, A
-ThreadID:=DllCall("GetWindowThreadProcessId", "Int", WinID, "Int", 0)
-InputLocaleID:=DllCall("GetKeyboardLayout", "Int", ThreadID)
-if(InputLocaleID == "0x4190419")
-{
-Send %rus%
-}
-if(InputLocaleId == "0x4090409")
-{
-SendRaw %eng%
-}
-Return
+	SetFormat, Integer, H
+	WinGet, WinID,, A
+	
+	ThreadID := DllCall("GetWindowThreadProcessId", "Int", WinID, "Int", 0)
+	InputLocaleID := DllCall("GetKeyboardLayout", "Int", ThreadID)
+	
+	if(InputLocaleID == "0x4190419")
+	{
+		Send %rus%
+	}
+	
+	if(InputLocaleId == "0x4090409")
+	{
+		SendRaw %eng%
+	}
+	
+	Return
 }
